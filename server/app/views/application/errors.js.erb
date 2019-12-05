@@ -1,6 +1,0 @@
-<% if @error == :csrf %>
-  location.reload();
-<% else %>
-  $('#content').html('<%= escape_javascript render(:file=> "/application/errors", :formats => [:html]) %>');
-  //history.pushState({}, '', '<%= request.original_url  %>');
-<% end %>
