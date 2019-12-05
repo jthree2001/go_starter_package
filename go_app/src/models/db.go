@@ -15,7 +15,7 @@ func init() {
 	if driver_name == "" {
 		log.Fatal("Invalid driver name")
 	}
-	dsn := "host=localhost port=5432 user=postgres dbname=starter_package_development sslmode=disable password=root"
+	dsn := "host=localhost port=5432 user=postgres dbname= sslmode=disable password=root"
 	if dsn == "" {
 		log.Fatal("Invalid DSN")
 	}
