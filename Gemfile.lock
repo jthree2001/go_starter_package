@@ -51,6 +51,11 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
     crass (1.0.5)
+    delayed_job (4.1.8)
+      activesupport (>= 3.0, < 6.1)
+    delayed_job_active_record (4.1.4)
+      activerecord (>= 3.0, < 6.1)
+      delayed_job (>= 3.0, < 5)
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.11.3)
@@ -160,6 +165,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   coffee-rails (~> 4.2)
+  delayed_job_active_record
   foreman
   go-on-rails (~> 0.4.0)
   jbuilder (~> 2.5)

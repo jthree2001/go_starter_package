@@ -10,6 +10,7 @@ end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.7'
 gem 'go-on-rails', '~> 0.4.0'
+gem 'delayed_job_active_record'
 
 gem 'pg'
 # Use Puma as the app server
