@@ -1,0 +1,30 @@
+<% if content_for?(:breadcrumbs) %>
+  $('#breadcrumbs').html("<%= escape_javascript yield :breadcrumbs %>");
+<% end %>
+
+<% if content_for?(:modal) %>
+  $('#z_hub_modal').html("<%= escape_javascript yield :modal %>");
+  $('#z_hub_modal input[type="submit"]').click(function(e){
+    if($(this).hasClass('show-load')){
+      $(this).parents('form').addClass('loading');
+    }
+    $(this).button('loading')
+  });
+<% end %>
+
+//Yield js partials
+<%= yield %>
+
+//Yield scripts from html partials
+<%= yield :scripts %>
+
+<% Array(error).each do |er| %>
+  noty({text: "<%= er %>", layout: "topRight",type: "error", animateOpen: {opacity: "show"}, closeWith: ["hover"], timeout: 2000});
+<% end %>
+<% Array(alert).each do |al| %>
+  noty({text: "<%= al %>", layout: "topRight",type: "warning", animateOpen: {opacity: "show"}, closeWith: ["hover"], timeout: 2000});
+<% end %>
+<% Array(notice).each do |no| %>
+  noty({text: "<%= no %>", layout: "topRight",type: "success", animateOpen: {opacity: "show"}, closeWith: ["hover"], timeout: 2000});
+<% end %>
+<% flash.discard(:notice); flash.discard(:error); flash.discard(:alert) %>

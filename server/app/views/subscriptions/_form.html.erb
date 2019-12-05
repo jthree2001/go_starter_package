@@ -1,0 +1,55 @@
+<% if request.format == :html %>
+  <%= render(:file=>"subscriptions/index", :formats => [:html]) %>
+<% end %>
+
+<% content_for :modal do %>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title"><%= ['update','edit'].include?(controller.action_name) ? "Update" : "New" %> Subscription</h2>
+      </div>
+      <%= simple_form_for @subscription, remote: true, html: { style: "display:inline;" } do |f| %>
+        <ul class="nav tab-header">
+          <li class="active"><a href="#modal-index" data-toggle="tab">Index</a></li>
+          <li class=""><a href="#modal-test" data-toggle="tab">Test Tab</a></li>
+        </ul>
+        <div class="modal-body">
+          <div class="tab-content">
+            <div class="tab-pane active" id="modal-index">
+              <ul class="errors" style="padding-left: 0px">
+                <% if f.object.errors.any? %>
+                  <div id="error_explanation" class="alert alert-danger" role="alert">
+                    <% f.object.errors.full_messages.each do |message| %>
+                      <li class="errors_list"><%= message %></li>
+                    <% end %>
+                  </div>
+                <% end %>
+              </ul>
+              <div class="form-group">
+                <%= f.text_field :name, class: "zuo-textbox" %>
+                <%= f.label :name, class: zuo_floating_label_class(@subscription.name) %>
+              </div>
+
+              <div class="form-group">
+                  <%= f.text_field :zuora_id, class: "zuo-textbox" %>
+                  <%= f.label :zuora_id, class: zuo_floating_label_class(@subscription.zuora_id) %>
+              </div>
+              <div class="radio">
+                <input type="radio">
+                <label>Radio Button Example</label>
+              </div>
+            </div>
+            <div class="tab-pane" id="modal-test"></div>
+          </div>
+        </div>
+        <div class="modal-footer" >
+          <%= link_to "Cancel", "#", class: "zuo-btn secondary", data: {dismiss: "modal"} %>
+          <%= f.submit f.object.new_record? ? "Create" : "Update", class: "zuo-btn primary"%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<% content_for :scripts do %>
+  $('#z_hub_modal').modal("show");
+<% end %>

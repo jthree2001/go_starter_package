@@ -1,0 +1,85 @@
+
+image: ruby:2.3.1
+stages:
+  - setup
+  - test
+  - deploy
+
+services:
+  - postgres:9.5.0
+
+variables:
+  POSTGRES_DB: test_db
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: root
+
+setup:
+  stage: setup
+  allow_failure: true
+  script:
+  - apt-get update -qy
+  - apt-get install -y nodejs
+  - bundle install --path /cache
+  - bundle exec rake db:create RAILS_ENV=test
+  - bundle exec rake db:migrate RAILS_ENV=test
+  - bundle exec rake test
+
+rubocop-testing:
+  stage: test
+  allow_failure: true
+  script:
+  - gem install rubocop
+  - rubocop --lint
+
+security-testing:
+  stage: test
+  allow_failure: true
+  script:
+  - gem install brakeman
+  - brakeman
+
+rspec-testing:
+  stage: test
+  allow_failure: true
+  script:
+  - gem install rspec
+  - rspec
+
+
+test-deploy:
+  stage: deploy
+  environment:
+    name: testing
+    url: https://$TESTING.apps.zuora.com
+  script:
+  - gem install dpl
+  - dpl --provider=deis --controller=https://deis.apps.zuora.com --username=$DEIS_USERNAME --password=$DEIS_PASSWORD --app=$TESTING --cli-version=v2.13.0
+  - ./deis run rake db:migrate -a $TESTING
+  only:
+  - test
+
+staging-deploy:
+  stage: deploy
+  environment:
+    name: staging
+    url: https://$STAGING.apps.zuora.com
+  script:
+  - gem install dpl
+  - dpl --provider=deis --controller=https://deis.apps.zuora.com --username=$DEIS_USERNAME --password=$DEIS_PASSWORD --app=$STAGING --cli-version=v2.13.0
+  - ./deis run rake db:migrate -a $STAGING
+  only:
+  - staging
+
+production-deploy:
+  stage: deploy
+  allow_failure: false
+  when: manual
+  environment:
+    name: production
+    url: https://$PRODUCTION.apps.zuora.com
+  script:
+  - gem install dpl
+  - dpl --provider=deis --controller=https://deis.apps.zuora.com --username=$DEIS_USERNAME --password=$DEIS_PASSWORD --app=$PRODUCTION --cli-version=v2.13.0
+  - ./deis run rake db:migrate -a $PRODUCTION
+  only:
+  - master
