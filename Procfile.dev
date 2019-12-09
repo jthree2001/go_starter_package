@@ -1,2 +1,2 @@
-web: cd client && PORT=3000 npm start
+web: cd client && PORT=3000 make client
 api: cd go_app && go run main.go
