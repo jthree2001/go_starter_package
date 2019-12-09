@@ -4,7 +4,9 @@ Personal starter package that is running Go on Rails with a react frontend.... w
 
 Postgres Database 
 
-start servers by running rake start
+start servers by running 
+
+rake start
 
 Not really documenting this yet.
 
